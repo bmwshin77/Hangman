@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace Hangman
 {
@@ -21,23 +22,41 @@ namespace Hangman
 
             void startGame()
             {
+
                 Console.WriteLine(
                     "Welcome to Hangman. \n" +
                     "Please type a word to be guessed, followed by \"enter\".");
                           
                 answerWord = Console.ReadLine();
+
                 Console.Clear();
 
-                remainingLives = BASE_LIVES;
-                numberOfGuesses = 0;
-
-                Console.WriteLine(
-                    "Welcome to Hangman. \n" +
-                    "You have {0} lives remaining \n" +
-                    "The answer word is " + answerWord.Length + " letters long. \n" +
-                    "Good luck! \n", remainingLives);
+                checkUserInput();
 
             }
+
+
+            void checkUserInput()
+            {
+                while (!Regex.IsMatch(answerWord, @"^[a-zA-Z ]+$"))
+                {
+                    Console.WriteLine("Please enter a valid word. No numbrers or symbols");
+                    startGame();
+                }
+               
+            }
+
+            //Console.Clear();
+
+            remainingLives = BASE_LIVES;
+            numberOfGuesses = 0;
+
+            Console.WriteLine(
+                "Welcome to Hangman. \n" +
+                "You have {0} lives remaining \n" +
+                "The answer word is " + answerWord.Length + " letters long. \n" +
+                "Good luck! \n", remainingLives);
+
 
             while (!playerWon && remainingLives > 0 ) // ! in front of a boolean means false
             {
@@ -54,11 +73,10 @@ namespace Hangman
                 } */
 
                 Console.WriteLine("\n");
-
                 Console.WriteLine("Enter a letter and then press \"enter\".");
+                
                 char userInput = Console.ReadLine().ElementAt(0);
-                //or try this >> char input = Console.ReadLine().ElementAt(0);
-
+                
                 guessLetters[numberOfGuesses++] = userInput;
                             
                 Console.Clear();
